@@ -21,7 +21,7 @@ class Wwan0 (module.BasicModule):
     final   = Wwan0Final()
 
     def run(self):
-        mode = shell("curl -s http://localhost:88/modems|jq '.[]|select(.ifname == \"usb0\")|.mode'")
+        mode = shell("curl -s http://localhost:88/modems|jq '.[]|select(.ifname == \"wwan0\")|.mode'")
         if mode == "null":
             return False
         return True
