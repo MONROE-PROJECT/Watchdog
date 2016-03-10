@@ -30,7 +30,7 @@ class MarvinService (module.BasicModule):
     def run(self):
         # is marvin running
         ps =  shell("ps ax|grep marvind")
-        if not "marvind.py" in ps: 
+        if not "bin/marvind" in ps: 
             return False
         # is it a service? 
         status =  shell("systemctl status marvind")

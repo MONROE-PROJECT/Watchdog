@@ -30,11 +30,13 @@ class Autotunnel (module.BasicModule):
     def run(self):
         """check if we can successfully reach the backend"""
 
-        tunnel = shell('ssh -o StrictHostKeychecking=no -o ConnectTimeout=5 -o BatchMode=yes -o UserKnownHostsFile=/dev/null $BACKEND_SSH_USER@$BACKEND_SSH_SERVER echo success', source='/etc/default/autotunnel')
+        tunnel = shell('ssh -o StrictHostKeychecking=no -i $BACKEND_SSH_KEY -o ConnectTimeout=5 -o BatchMode=yes -o UserKnownHostsFile=/dev/null $BACKEND_SSH_USER@$BACKEND_SSH_SERVER echo success', source='/etc/default/autotunnel')
         if not "success" in tunnel:
             return False
-        shell = ('mkdir -p /var/lib/biteback/')
-        shell = ('date +%s > /var/lib/biteback/autotunnel.last')
+
+        # store last successful connection in a file
+        shell('mkdir -p /var/lib/biteback/')
+        shell('date +%s > /var/lib/biteback/autotunnel.last')
         return True
 
 register.put(Autotunnel())
