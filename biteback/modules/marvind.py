@@ -28,8 +28,11 @@ class MarvinService (module.BasicModule):
     final   = MarvinFinal()
 
     def run(self):
-        # is marvin running
-        ps =  shell("ps ax|grep marvind")
+        # first check if it configured, if no, ignore 
+        ls = shell("ls /etc/marvind.conf")
+        if not "marvind.conf" in ls:
+            return True
+        ps = shell("ps ax|grep marvind")
         if not "bin/marvind" in ps: 
             return False
         # is it a service? 
