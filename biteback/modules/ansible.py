@@ -21,8 +21,8 @@ class Ansible (module.BasicModule):
     final   = AnsibleFinal()
 
     def run(self):
-        cron =  shell("crontab -l")
-        if not "ansible-wrapper" in cron: 
+        cron =  shell("cat /etc/cron.d/ansible-wrapper")
+        if not "/usr/bin/ansible-wrapper" in cron: 
             return False
         return True
 
