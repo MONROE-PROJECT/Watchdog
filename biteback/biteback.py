@@ -3,7 +3,7 @@
 import sys
 import argparse
 import register
-from util import shell
+from util import *
 from modules import *
 
 import zmq
@@ -15,8 +15,6 @@ SYSEVENT_STATUS   = "Watchdog.Status"
 
 tests = register.get()
 context = zmq.Context()
-
-leds_enabled=False
 
 def sysevent(message, eventType = SYSEVENT_FAILED):
     try:
@@ -35,23 +33,17 @@ def succeeds(method):
         print "[DEBUG2]",ex
         return False
 
-def init_leds():
-    ok = shell("modprobe leds-apu; echo $?").strip() 
-    if ok == "0":
-        return True
-    return False
-
-def leds(a,b,c):
-    if not leds_enabled: return
-    shell("echo %i > /sys/class/leds/apu\:%i/brightness" % (1 if a else 0, 1))
-    shell("echo %i > /sys/class/leds/apu\:%i/brightness" % (1 if b else 0, 2))
-    shell("echo %i > /sys/class/leds/apu\:%i/brightness" % (1 if c else 0, 3))
-
 def watchdog(doRepairs=True, doFinals=True):
     print "Imported %i tests" % len(tests)
 
     success = len(tests)
     run     = 0
+
+    # Running tests: One on, one blinking
+    leds(True, False, False)
+    led_heartbeat(2)
+    led_heartbeat(3)
+
     for test in tests:
         print "Running %s" % test.__doc__
         if not succeeds(test.run):
@@ -77,18 +69,20 @@ def watchdog(doRepairs=True, doFinals=True):
     sysevent("%i/%i tests succeeded, %i tests run." % (success, len(tests), run), SYSEVENT_STATUS)
     if success == len(tests):
         leds(True, True, True)
+    elif success == len(tests)-1 and not succeeds(Hub().run):
+        leds(True, True, False)
     else:
-        leds(False, False, False)
+        # Failed tests: One green light - the third one will be set if the hub is connected with modems
+        leds(True, False, False)
 
 
 def main():
-    global leds_enabled
     parser = argparse.ArgumentParser()
     parser.add_argument("-R","--skip-repairs", help="do not run repair actions", action="store_true")
     parser.add_argument("-F","--skip-finals", help="do not run final actions", action="store_true")
     args = parser.parse_args()
 
-    leds_enabled = init_leds()
+    init_leds()
     watchdog(not args.skip_repairs, not args.skip_finals)
 
 if __name__ == "__main__":

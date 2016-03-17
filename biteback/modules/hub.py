@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from biteback import module, register
-from biteback.util import shell, trigger_maintenance
+from biteback.util import shell, trigger_maintenance, leds
 
 class HubFinal:
     """Maintenance"""
@@ -26,7 +26,7 @@ class Hub (module.BasicModule):
     def run(self):
         links = shell("ip link")
         if ("usb0" not in links) and ("usb1" not in links) and ("usb2" not in links):
-            return False
+            return False 
         return True
 
 register.put(Hub())
