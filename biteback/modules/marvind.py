@@ -30,7 +30,7 @@ class MarvinService (module.BasicModule):
     def run(self):
         # first check if it configured, if no, ignore 
         ls = shell("ls /etc/marvind.conf")
-        if not "marvind.conf" in ls:
+        if "No such file" in ls:
             return True
         ps = shell("ps ax|grep marvind")
         if not "bin/marvind" in ps: 
