@@ -3,6 +3,8 @@
 import sys
 import argparse
 import register
+from time import time
+
 from util import *
 from modules import *
 
@@ -12,6 +14,8 @@ import fileinput
 SYSEVENT_FAILED   = "Watchdog.Failed"
 SYSEVENT_REPAIRED = "Watchdog.Repaired"
 SYSEVENT_STATUS   = "Watchdog.Status"
+
+POLICY_RUN_DELAY  = 300
 
 tests = register.get()
 context = zmq.Context()
@@ -33,7 +37,19 @@ def succeeds(method):
         print "[DEBUG2]",ex
         return False
 
-def watchdog(doRepairs=True, doFinals=True):
+def watchdog(doRepairs=True, doFinals=True, doForce=False):
+    if not doForce:
+        lastRun = 0
+        try:
+            lastRun = int(open("/tmp/biteback.last", "r").read())
+        except Exception,ex:
+            pass 
+    
+        delta = time()-lastRun
+        if delta < POLICY_RUN_DELAY and delta>=0:
+            print "Skipping run. Last run was %i seconds ago." % (delta,)
+            sys.exit(0) 
+
     print "Imported %i tests" % len(tests)
 
     success = len(tests)
@@ -74,16 +90,20 @@ def watchdog(doRepairs=True, doFinals=True):
     else:
         # Failed tests: One green light - the third one will be set if the hub is connected with modems
         leds(True, False, False)
+    fd = open("/tmp/biteback.last","w")
+    fd.write(str(int(time())))
+    fd.close()
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-R","--skip-repairs", help="do not run repair actions", action="store_true")
     parser.add_argument("-F","--skip-finals", help="do not run final actions", action="store_true")
+    parser.add_argument("-f","--force", help="run, despite having run during the last %i seconds" % (POLICY_RUN_DELAY,), action="store_true")
     args = parser.parse_args()
 
     init_leds()
-    watchdog(not args.skip_repairs, not args.skip_finals)
+    watchdog(not args.skip_repairs, not args.skip_finals, args.force)
 
 if __name__ == "__main__":
     main()
