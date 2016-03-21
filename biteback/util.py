@@ -20,8 +20,11 @@ def trigger_reinstall():
     # on boot
     trigger_reboot()
 
-def shell(cmd, timeout=10, source=None):
-    cmd = "timeout -s 9 %i %s" % (timeout, cmd)
+def shell(cmd, timeout=10, source=None, bashEscape=False):
+    if bashEscape:
+        cmd = "timeout -s 9 %i bash -c '%s'" % (timeout, cmd)
+    else:
+        cmd = "timeout -s 9 %i %s" % (timeout, cmd)
     if source:
         cmd = ". %s && %s" % (source, cmd)
     print "Running: %s" % cmd

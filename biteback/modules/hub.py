@@ -12,7 +12,7 @@ class HubFinal:
 class FixHubAuthorized:
     """reset authorized flag"""
     def run(self):
-        authfile = shell('for i in $(find /sys -name authorized); do echo -n "$i  "; cat $(echo $i|sed -e "s/authorized/idProduct/"); done | grep 2514 | sed -e "s/ .*//g"')
+        authfile = shell('for i in $(find /sys -name authorized); do echo -n "$i  "; cat $(echo $i|sed -e "s/authorized/idProduct/"); done | grep 2514 | sed -e "s/ .*//g"', bashEscape=True)
         if authfile:
             shell("echo 0 > %s" % authfile)
             shell("echo 1 > %s" % authfile)
