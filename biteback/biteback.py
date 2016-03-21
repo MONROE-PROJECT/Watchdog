@@ -61,9 +61,10 @@ def watchdog(doRepairs=True, doFinals=True, doForce=False):
     led_heartbeat(3)
 
     for test in tests:
-        print "Testing %s" % test.__doc__
+        print "=== Testing %s ===" % test.__doc__
         if not succeeds(test.run):
             sysevent("Failed %s" % test.__doc__, SYSEVENT_FAILED)
+            print "       ^^^^^^"
             if not doRepairs: 
                 success -= 1
                 continue
