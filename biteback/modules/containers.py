@@ -6,7 +6,7 @@ from biteback.util import shell, trigger_reboot
 class PullContainers:
     """pull monroe base image and experiments"""
     def run(self):
-        shell("docker pull monroe/base")
+        shell("docker pull monroe/base", timeout=300)
         #shell("docker pull monroe/ping")
         #...
 
