@@ -78,7 +78,7 @@ def watchdog(doRepairs=True, doFinals=True, doForce=False):
             if not succeeds(test.run):
                 success -= 1
                 final = test.get_final()
-                if not doFinals: continue
+                if final is None or not doFinals: continue
                 sysevent("Resolving to %s" % final.__doc__, SYSEVENT_FAILED)
                 succeeds(final.run)
         run += 1
