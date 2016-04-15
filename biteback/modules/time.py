@@ -10,37 +10,23 @@ class TimeFinal:
     def run(self):
         return trigger_maintenance()
 
-class FixTimeSkew:
-    """stop ntp service and run ntpd -gq"""
-    def run(self):
-        shell("systemctl stop ntp")
-        shell("ntpd -gq")
-        shell("systemctl start ntp")
-
 class RestartNTP():
     """restart ntp service"""
     def run(self):
         shell("systemctl start ntp")
 
 class SystemTime (module.BasicModule):
-    """time skew within SSL bounds"""
+    """ntp is connected and working"""
 
-    repairs = [FixTimeSkew(), RestartNTP()]
+    repairs = [RestartNTP()]
     final   = TimeFinal()
 
     def run(self):
-        try:
-            offsets = shell("ntpq -pn|awk '{print $9}'|tail -n+3").strip().split("\n")
-            for o in offsets:
-                if abs(float(o)) > 60:
-                    return False
-        except:
-            try:
-                t = int(shell("curl -s www.timeapi.org/utc/now?format=%25s"))
-                if abs(time()-t) > 60:
-                    return False
-            except: # we might just not have connectivity
-                pass 
-        return True
+        stratum = shell("ntpq -pn|tail -n4|awk '{print $3}'").split("\n")
+        for line in stratum:
+            s = int(line)
+            if s>0 and s<16:
+                return True
+        return False
 
 register.put(SystemTime())
