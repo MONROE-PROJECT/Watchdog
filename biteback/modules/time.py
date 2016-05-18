@@ -22,7 +22,7 @@ class SystemTime (module.BasicModule):
     final   = TimeFinal()
 
     def run(self):
-        stratum = shell("ntpq -pn|tail -n4|awk '{print $3}'").split("\n")
+        stratum = shell("ntpq -pn|tail -n4|awk '{print $3}'").strip().split("\n")
         for line in stratum:
             s = int(line)
             if s>0 and s<16:
