@@ -33,9 +33,16 @@ class MultiService (module.BasicModule):
         if not "multi_client" in ps: 
             return False
         # is it a service? 
-        status =  shell("systemctl status multi")
+        status = shell("systemctl status multi")
         if not "running" in status: 
             return False
-        return True
+        # do we have any IP addresses (not crashed)
+        for iface in ["usb0","usb1","usb2","wwan0","eth0", "wwan2"]:
+            addr = shell("ifconfig %s 2>/dev/null | grep 'inet addr'" % iface).strip()
+            if addr != "":
+                print "Address detected: -%s-" % addr
+                return True
+        return False
+
 
 register.put(MultiService())
