@@ -1,5 +1,6 @@
 #!/usr/bin/env
 
+import os
 import sys
 from subprocess import STDOUT, check_output, CalledProcessError
 
@@ -29,7 +30,9 @@ def shell(cmd, timeout=10, source=None, bashEscape=False):
         cmd = ". %s && %s" % (source, cmd)
     print "Running: %s" % cmd
     try:
-      output = check_output(cmd, stderr=STDOUT, shell=True)
+      env = os.environ.copy()
+      env['PATH']='/usr/bin/:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+      output = check_output(cmd, stderr=STDOUT, shell=True, env=env)
     except OSError,er:
       output = str(er)
     except CalledProcessError,er:
