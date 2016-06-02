@@ -2,6 +2,8 @@
 
 from biteback import module, register
 from biteback.util import shell, trigger_reboot
+import time
+import zmq
 
 class MEFinal:
     """Reboot"""
@@ -35,6 +37,28 @@ class MEService (module.BasicModule):
         status =  shell("systemctl status metadata-exporter")
         if not "running" in status: 
             return False
-        return True
+
+        # if the docker0 interface does not exist, not connecting is ok
+        docker = shell("ifconfig docker0")
+        if not "inet addr" in docker:
+            return True
+
+        print("Subscribing to ZMQ socket on tcp://172.17.0.1:5556")
+        context = zmq.Context()
+
+        sub = context.socket(zmq.SUB)
+        sub.connect("tcp://172.17.0.1:5556")
+        sub.setsockopt(zmq.SUBSCRIBE, '')
+
+        poller = zmq.Poller()
+        poller.register(sub, zmq.POLLIN)
+
+        socks = dict(poller.poll(10000))
+        if socks:
+            if socks.get(sub) == zmq.POLLIN:
+                return True
+        else:
+            print("Timeout.")
+        return False
 
 register.put(MEService())
