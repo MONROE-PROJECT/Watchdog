@@ -38,7 +38,7 @@ class MultiService (module.BasicModule):
             return False
         # do we have any IP addresses (not crashed)
         for iface in ["usb0","usb1","usb2","wwan0","eth0", "wwan2"]:
-            addr = shell("ifconfig %s 2>/dev/null | grep 'inet addr'" % iface).strip()
+            addr = shell("ifconfig %s 2>/dev/null | grep 'inet' | grep 'cast'" % iface).strip()
             if addr != "":
                 print "Address detected: -%s-" % addr
                 return True

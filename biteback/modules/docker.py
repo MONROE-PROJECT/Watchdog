@@ -25,6 +25,7 @@ class ReinstallDocker:
 class DockerService (module.BasicModule):
     """docker service"""
 
+# TODO: Repair #1: restore docker.service file which uses /etc/defaults/docker
     repairs = [RestartDocker(), ReinstallDocker()]
     final   = DockerFinal()
 
@@ -34,7 +35,7 @@ class DockerService (module.BasicModule):
         if not "ii" in installed:
             return True
 
-        ps =  shell("ps ax|grep docker")
+        ps = shell("ps ax|grep docker")
         if not "--bip" in ps: 
             return False
 
@@ -42,7 +43,7 @@ class DockerService (module.BasicModule):
         if not "active (running)" in status: 
             return False
 
-        addr = shell("ifconfig docker0 2>/dev/null | grep 'inet addr'").strip()
+        addr = shell("ifconfig docker0 2>/dev/null | grep inet | grep cast").strip()
         if addr != "":
             print "Address detected: -%s-" % addr
             return True

@@ -39,8 +39,8 @@ class MEService (module.BasicModule):
             return False
 
         # if the docker0 interface does not exist, not connecting is ok
-        docker = shell("ifconfig docker0")
-        if not "inet addr" in docker:
+        docker = shell("ifconfig docker0 2>/dev/null | grep inet | grep cast")
+        if not "inet" in docker:
             return True
 
         print("Subscribing to ZMQ socket on tcp://172.17.0.1:5556")
