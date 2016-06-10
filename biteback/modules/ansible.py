@@ -12,7 +12,7 @@ class AnsibleFinal:
 class RescheduleAnsible:
     """restore ansible cron entry"""
     def run(self):
-        shell("crontab -l | grep -v ansible-wrapper | { cat; echo '42 * * * * /usr/bin/ansible-wrapper &>/dev/null' } | crontab")
+        shell("echo '*/20 * * * * root /usr/bin/ansible-wrapper &>/dev/null' > /etc/cron.d/ansible-wrapper")
 
 class Ansible (module.BasicModule):
     """ansible wrapper installed in crontab"""
