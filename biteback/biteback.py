@@ -3,7 +3,7 @@
 import sys
 import argparse
 import register
-from time import time
+import time
 
 from util import *
 from modules import *
@@ -45,7 +45,7 @@ def watchdog(doRepairs=True, doFinals=True, doForce=False):
         except Exception,ex:
             pass 
     
-        delta = time()-lastRun
+        delta = time.time()-lastRun
         if delta < POLICY_RUN_DELAY and delta>=0:
             print "Skipping run. Last run was %i seconds ago." % (delta,)
             sys.exit(0) 
@@ -93,7 +93,7 @@ def watchdog(doRepairs=True, doFinals=True, doForce=False):
         # Failed tests: One green light - the third one will be set if the hub is connected with modems
         leds(True, False, False)
     fd = open("/tmp/biteback.last","w")
-    fd.write(str(int(time())))
+    fd.write(str(int(time.time())))
     fd.close()
 
 
