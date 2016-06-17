@@ -39,7 +39,7 @@ class MEService (module.BasicModule):
             return False
 
         # if the docker0 interface does not exist, not connecting is ok
-        docker = shell("ifconfig docker0 2>/dev/null | grep inet | grep cast")
+        docker = shell("ifconfig docker0 2>/dev/null | grep inet | grep ask")
         if not "inet" in docker:
             return True
 

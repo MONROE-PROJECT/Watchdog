@@ -86,6 +86,7 @@ def watchdog(doRepairs=True, doFinals=True, doForce=False):
     sysevent("%i/%i tests succeeded, %i tests run." % (success, len(tests), run), SYSEVENT_STATUS)
     if success == len(tests):
         leds(True, True, True)
+        shell("grub-editenv /.bootos set BOOTCOUNT=0")
     elif success == len(tests)-1 and not succeeds(Hub().run):
         leds(True, True, False)
     else:

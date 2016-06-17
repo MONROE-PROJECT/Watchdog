@@ -14,11 +14,19 @@ def trigger_reboot():
     # TODO: write a reboot hint to the self-test result file
     # causing the watchdog plugin to return an error code
     # causing the watchdog to reboot the node.
+    ## DISABLED until tested
+    ## shell("shutdown -r +1 'System self-test unrecoverable. Trying reboot in 1 min.'")
+    ## sleep(300) # wait 5 min, then force reboot if we are still running.
+    ## shell("echo 1 > /proc/sys/kernel/sysrq")
+    ## shell("echo b > /proc/sysrq-trigger")
     pass
 
 def trigger_reinstall():
     # TODO: remove the successful boot hint to cause reinstall 
     # on boot
+
+    ## DISABLED until tested
+    ## shell("grub-editenv /.bootos set FORCEREINSTALL=1")
     trigger_reboot()
 
 def shell(cmd, timeout=10, source=None, bashEscape=False):
