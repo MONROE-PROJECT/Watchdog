@@ -26,7 +26,7 @@ class DockerService (module.BasicModule):
     """docker service"""
 
 # TODO: Repair #1: restore docker.service file which uses /etc/defaults/docker
-    repairs = [RestartDocker(), ReinstallDocker()]
+    repairs = [RestartDocker()]
     final   = DockerFinal()
 
     def run(self):

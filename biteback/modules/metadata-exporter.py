@@ -26,7 +26,7 @@ class ReinstallME:
 class MEService (module.BasicModule):
     """metadata-exporter service"""
 
-    repairs = [RestartME(), ReinstallME()]
+    repairs = [RestartME()]
     final   = MEFinal()
 
     def run(self):
