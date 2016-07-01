@@ -13,9 +13,9 @@ class FixHubAuthorized:
     """reset authorized flag"""
     def run(self):
         authfile = shell('for i in $(find /sys -name authorized); do echo -n "$i  "; cat $(echo $i|sed -e "s/authorized/idProduct/"); done | grep 2514 | sed -e "s/ .*//g"', bashEscape=True)
-        if authfile:
-            shell("echo 0 > %s" % authfile)
-            shell("echo 1 > %s" % authfile)
+        if authfile and not "no such file" in authfile:
+            shell("echo 0 > %s" % authfile, bashEscape=True)
+            shell("echo 1 > %s" % authfile, bashEscape=True)
 
 class Hub (module.BasicModule):
     """Check if the entire yepkit hub has crashed"""
