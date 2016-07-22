@@ -41,11 +41,14 @@ class Priorities(module.BasicModule):
             priorities[wwan0[0]] = self.PRIO_100MB
 
         for mac,userest in links:
+            print "Checking %s with priority %s" % (mac, userest)
             if mac in priorities:
                 if userest != priorities[mac]:
                     c.execute("UPDATE Links SET USEREST=? WHERE ICCIDMAC=?", (priorities[mac], mac))
+                    print "Setting %s to %s" % (mac, priorities[mac])
             else:
                 c.execute("UPDATE Links SET USEREST=? WHERE ICCIDMAC=?", (self.PRIO_04MB, mac))
+                print "Setting %s to %s" % (mac, self.PRIO_04MB)
         conn.commit()
         conn.close()
         return True
