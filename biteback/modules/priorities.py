@@ -46,7 +46,7 @@ class Priorities(module.BasicModule):
                 if userest != priorities[mac]:
                     c.execute("UPDATE Links SET USEREST=? WHERE ICCIDMAC=?", (priorities[mac], mac))
                     print "Setting %s to %s" % (mac, priorities[mac])
-            else if userest != self.PRIO_04MB:
+            elif userest != self.PRIO_04MB:
                 c.execute("UPDATE Links SET USEREST=? WHERE ICCIDMAC=?", (self.PRIO_04MB, mac))
                 print "Setting %s to %s" % (mac, self.PRIO_04MB)
         conn.commit()
