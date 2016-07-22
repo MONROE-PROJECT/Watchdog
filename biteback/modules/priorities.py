@@ -3,6 +3,7 @@
 from biteback import module, register
 from biteback.util import shell, trigger_maintenance
 import sqlite3 as db
+import simplejson as json
 
 class PrioritiesFinal:
     """Maintenance"""
@@ -26,15 +27,18 @@ class Priorities(module.BasicModule):
         c = conn.cursor()
         links = c.execute("SELECT ICCIDMAC, USEREST from Links")
 
-        eth0 = shell("cat /sys/class/net/eth0/address 2>/dev/null").replace(":","").strip()
-        wlan0 = shell("cat /sys/class/net/wlan0/address 2>/dev/null").replace(":","").strip()
-        wwan0 = shell("cat /sys/class/net/wwan0/address 2>/dev/null").replace(":","").strip()
-
-        priorities = {
-            eth0:  self.PRIO_1000MB,
-            wlan0: self.PRIO_500MB,
-            wwan0: self.PRIO_100MB
-        }
+        data = json.loads(shell("curl -s http://localhost:88/dlb"))
+        
+        priorities = {}
+        eth0 = [x['mac'] for x in data['interfaces'] if x['name']=='eth0']
+        if eth0:
+            priorities[eth0[0]] = self.PRIO_1000MB
+        wlan0 = [x['mac'] for x in data['interfaces'] if x['name']=='wlan0']
+        if wlan0:
+            priorities[wlan0[0]] = self.PRIO_500MB
+        wwan0 = [x['iccid'] for x in data['interfaces'] if x['name']=='wwan0']
+        if wwan0:
+            priorities[wwan0[0]] = self.PRIO_100MB
 
         for mac,userest in links:
             if mac in priorities:
