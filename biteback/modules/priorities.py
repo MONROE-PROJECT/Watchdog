@@ -26,6 +26,7 @@ class Priorities(module.BasicModule):
         conn = db.connect('/etc/config/celerway.db')
         c = conn.cursor()
         links = c.execute("SELECT ICCIDMAC, USEREST from Links")
+        links = links.fetchall()
 
         data = json.loads(shell("curl -s http://localhost:88/dlb"))
         
@@ -41,12 +42,11 @@ class Priorities(module.BasicModule):
             priorities[wwan0[0]] = self.PRIO_100MB
 
         for mac,userest in links:
-            print "Checking %s with priority %s" % (mac, userest)
             if mac in priorities:
                 if userest != priorities[mac]:
                     c.execute("UPDATE Links SET USEREST=? WHERE ICCIDMAC=?", (priorities[mac], mac))
                     print "Setting %s to %s" % (mac, priorities[mac])
-            else:
+            else if userest != self.PRIO_04MB:
                 c.execute("UPDATE Links SET USEREST=? WHERE ICCIDMAC=?", (self.PRIO_04MB, mac))
                 print "Setting %s to %s" % (mac, self.PRIO_04MB)
         conn.commit()
