@@ -7,13 +7,12 @@ from subprocess import STDOUT, check_output, CalledProcessError
 leds_enabled = False
 
 def trigger_maintenance():
-    # TODO: stop all experiments and set a maintenance flag
+    fd = open("/.maintenance","w")
+    fd.write("1\n")
+    fd.close()
     pass
 
 def trigger_reboot():
-    # TODO: write a reboot hint to the self-test result file
-    # causing the watchdog plugin to return an error code
-    # causing the watchdog to reboot the node.
     ## DISABLED until tested
     ## shell("shutdown -r +1 'System self-test unrecoverable. Trying reboot in 1 min.'")
     ## sleep(300) # wait 5 min, then force reboot if we are still running.
@@ -22,12 +21,13 @@ def trigger_reboot():
     pass
 
 def trigger_reinstall():
-    # TODO: remove the successful boot hint to cause reinstall 
+    # TODO: remove the successful boot hint to cause reinstall
     # on boot
 
-    ## DISABLED until tested
+    ## DISABLED until reinstallation preserves key files
     ## shell("grub-editenv /.bootos set FORCEREINSTALL=1")
-    trigger_reboot()
+    #trigger_reboot()
+    pass
 
 def shell(cmd, timeout=10, source=None, bashEscape=False):
     if bashEscape:
