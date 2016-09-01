@@ -26,7 +26,7 @@ class RmDocker:
 class HddUsage (module.BasicModule):
     """Disk space available"""
 
-    repairs = [ClearLogs(), RmDocker()]
+    repairs = [ClearLogs()]
     final   = HddFinal()
 
     def run(self):
