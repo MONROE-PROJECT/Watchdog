@@ -6,10 +6,15 @@ import time
 import zmq
 
 class MEFinal:
-    """Reboot"""
+    """Maintenance"""
 
     def run(self):
         return trigger_maintenance()
+
+class ReloadFirewall:
+    """reload firewall rules"""
+    def run(self):
+        shell("circle restart")
 
 class RestartME:
     """enable & restart metadata-exporter service"""
