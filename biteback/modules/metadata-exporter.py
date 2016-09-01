@@ -31,7 +31,7 @@ class ReinstallME:
 class MEService (module.BasicModule):
     """metadata-exporter service"""
 
-    repairs = [RestartME()]
+    repairs = [ReloadFirewall(), RestartME()]
     final   = MEFinal()
 
     def run(self):
