@@ -12,7 +12,7 @@ class HddFinal:
 class ClearLogs:
     """delete rotated log files and other suspects"""
     def run(self):
-        shell("rm /var/log/*.gz", timeout=60)
+        shell("rm /var/log/*.gz /var/log/*.?", timeout=60)
         shell("apt-get clean", timeout=120)
 
 class RmDocker:
