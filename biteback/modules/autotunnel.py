@@ -4,7 +4,7 @@ from biteback import module, register
 from biteback.util import shell, trigger_reboot
 
 class AutotunnelFinal:
-    """Reboot"""
+    """Reinstall if no connection in three days"""
 
     def run(self):
         last = None
