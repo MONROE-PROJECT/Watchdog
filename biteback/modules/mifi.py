@@ -34,4 +34,4 @@ class Mifi (module.BasicModule):
                     return False
         return True
 
-register.put(Hub())
+register.put(Mifi())
