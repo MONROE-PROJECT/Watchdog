@@ -29,7 +29,7 @@ class Mifi (module.BasicModule):
                 interface=modem.get('ifname')
                 ip4table=modem.get('ip4table')
                 code = shell('curl -4 --interface '+interface+' -sL -w "%{http_code}" http193.10.227.25/test/1000M.zip -r 0-0 -o /dev/null --connect-timeout 10 -m 20; echo " $?"', timeout=30).strip()
-                if code=='000 28' # curl failed with a connection timeout
+                if code=='000 28': # curl failed with a connection timeout
                     shell('curl -s -X POST http://localhost:88/modems/' + ip4table + '/usbrestart')
                     return False
         return True
