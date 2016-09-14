@@ -7,7 +7,7 @@ class HubFinal:
     """Maintenance"""
 
     def run(self):
-        return trigger_maintenance()
+        return trigger_maintenance("no mifis found")
 
 class FixHubAuthorized:
     """reset authorized flag"""

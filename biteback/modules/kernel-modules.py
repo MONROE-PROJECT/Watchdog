@@ -7,7 +7,7 @@ class KModFinal:
     """Temporary Maintenance"""
 
     def run(self):
-        return trigger_maintenance()
+        return trigger_maintenance("kernel modules k10temp or sp5100_tco not loaded")
 
 class ReloadKernelModules:
     """reload kernel modules"""

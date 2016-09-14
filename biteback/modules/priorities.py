@@ -8,7 +8,7 @@ import simplejson as json
 class PrioritiesFinal:
     """Maintenance"""
     def run(self):
-        return trigger_maintenance()
+        return trigger_maintenance("(priorities module failed, how?)")
 
 class Priorities(module.BasicModule):
     """Correct priorities are set for load balancer interfaces"""

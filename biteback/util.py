@@ -2,15 +2,19 @@
 
 import os
 import sys
+import time
 from subprocess import STDOUT, check_output, CalledProcessError
 
 leds_enabled = False
 
-def trigger_maintenance():
+def trigger_maintenance(reason):
     fd = open("/.maintenance","w")
     fd.write("1\n")
     fd.close()
-    pass
+
+    fd = open("/tmp/maintenance.reasons","a")
+    fd.write("[%s] %s\n" % (time.time(),reason))
+    fd.close()
 
 def trigger_reboot():
     ## DISABLED until tested

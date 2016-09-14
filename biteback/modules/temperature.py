@@ -7,7 +7,7 @@ class TempFinal:
     """Temporary Maintenance"""
 
     def run(self):
-        return trigger_maintenance()
+        return trigger_maintenance("cpu temperature exceeded")
 
 class Temperature(module.BasicModule):
     """CPU Temperature"""

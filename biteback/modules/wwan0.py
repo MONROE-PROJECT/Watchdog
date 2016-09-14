@@ -7,7 +7,7 @@ class Wwan0Final:
     """Maintenance"""
 
     def run(self):
-        return trigger_maintenance()
+        return trigger_maintenance("internal modem is not running")
 
 class RestartNL:
     """restart network-listener"""

@@ -9,7 +9,7 @@ class MEFinal:
     """Maintenance"""
 
     def run(self):
-        return trigger_maintenance()
+        return trigger_maintenance("cannot communicate with metadata-exporter")
 
 class ReloadFirewall:
     """reload firewall rules"""

@@ -7,7 +7,7 @@ class DockerFinal:
     """Maintenance"""
 
     def run(self):
-        return trigger_maintenance()
+        return trigger_maintenance("docker service does not run.")
 
 class RestartDocker:
     """enable & restart docker service"""

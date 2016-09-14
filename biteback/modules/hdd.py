@@ -7,7 +7,7 @@ class HddFinal:
     """Maintenance"""
 
     def run(self):
-        return trigger_maintenance()
+        return trigger_maintenance("less than 500000 bytes of free disk space.")
 
 class ClearLogs:
     """delete rotated log files and other suspects"""
