@@ -58,7 +58,7 @@ class MEService (module.BasicModule):
         poller = zmq.Poller()
         poller.register(sub, zmq.POLLIN)
 
-        socks = dict(poller.poll(10000))
+        socks = dict(poller.poll(30000))
         if socks:
             if socks.get(sub) == zmq.POLLIN:
                 return True
