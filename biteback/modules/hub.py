@@ -20,7 +20,7 @@ class FixHubAuthorized:
 class Hub (module.BasicModule):
     """Check if the entire yepkit hub has crashed"""
 
-    repairs = [FixHubAuthorized()]
+    repairs = []
     final   = HubFinal()
 
     def run(self):
