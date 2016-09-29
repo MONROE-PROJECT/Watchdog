@@ -27,7 +27,7 @@ class Hub (module.BasicModule):
     def run(self):
         links = shell("ip link")
         now = int(time.time())
-        if ("usb0" in links) or ("usb1" in links) in ("usb2" in links):
+        if ("usb0" in links) or ("usb1" in links) or ("usb2" in links):
             shell("echo %i > /tmp/last_seen_mifis" % now)
             return True
         last = shell("cat /tmp/last_seen_mifis")
