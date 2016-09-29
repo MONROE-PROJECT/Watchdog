@@ -2,6 +2,7 @@
 
 from biteback import module, register
 from biteback.util import shell, trigger_maintenance, leds
+import time
 
 class HubFinal:
     """Maintenance"""
@@ -25,8 +26,17 @@ class Hub (module.BasicModule):
 
     def run(self):
         links = shell("ip link")
-        if ("usb0" not in links) and ("usb1" not in links) and ("usb2" not in links):
-            return False 
+        now = int(time.time())
+        if ("usb0" in links) or ("usb1" in links) in ("usb2" in links):
+            shell("echo %i > /tmp/last_seen_mifis" % now)
+            return True
+        last = shell("cat /tmp/last_seen_mifis")
+        try:
+            last = int(last)
+            if (now-last) > 300:
+                return False
+        except:
+            pass
         return True
 
 register.put(Hub())
