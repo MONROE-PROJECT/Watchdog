@@ -33,7 +33,7 @@ class Hub (module.BasicModule):
         last = shell("cat /tmp/last_seen_mifis")
         try:
             last = int(last)
-            if (now-last) > 300:
+            if (now-last) > 1800:
                 return False
         except:
             pass
