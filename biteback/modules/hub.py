@@ -18,10 +18,20 @@ class FixHubAuthorized:
             shell("echo 0 > %s" % authfile, bashEscape=True)
             shell("echo 1 > %s" % authfile, bashEscape=True)
 
+class RebootOnce:
+    """reboot once"""
+    #TODO: use regular trigger_reboot
+    def run(self):
+        oncefile = shell("cat /.rebooted")
+        if "1" in oncefile:
+            return False
+        shell("echo 1 > /.rebooted")
+        shell("reboot")
+
 class Hub (module.BasicModule):
     """Check if the entire yepkit hub has crashed"""
 
-    repairs = []
+    repairs = [RebootOnce()]
     final   = HubFinal()
 
     def run(self):
