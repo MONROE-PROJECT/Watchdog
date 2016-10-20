@@ -31,12 +31,14 @@ class Hub (module.BasicModule):
             shell("echo %i > /tmp/last_seen_mifis" % now)
             return True
         last = shell("cat /tmp/last_seen_mifis")
-        try:
+        if "No such file" in last:
+            # after reboot, the file does not exist.
+            # In that case, we reset the timer and wait for the regular timeout.
+            shell("echo %i > /tmp/last_seen_mifis" % now)
+        else:
             last = int(last)
             if (now-last) > 1800:
                 return False
-        except:
-            pass
         return True
 
 register.put(Hub())
