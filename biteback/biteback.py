@@ -72,6 +72,7 @@ def watchdog(doRepairs=True, doFinals=True, doForce=False):
             for repair in test.get_repairs():
                 print "Trying %s" % repair.__doc__
                 succeeds(repair.run)
+                time.sleep(3)
                 if succeeds(test.run):
                     sysevent("Fixed using %s" % repair.__doc__, SYSEVENT_REPAIRED)
                     break;
