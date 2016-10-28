@@ -7,7 +7,15 @@ class DockerFinal:
     """Maintenance"""
 
     def run(self):
-        return trigger_maintenance("docker service does not run.")
+        last = shell("cat /tmp/last_seen_docker")
+        if "No such file" in last:
+            # after reboot, the file does not exist.
+            # In that case, we reset the timer and wait for the regular timeout.
+            shell("date +%s > /tmp/last_seen_docker")
+        else:
+            last = int(last)
+            if (now-last) > 1800:
+                return trigger_maintenance("docker service has not run for 30 minutes.")
 
 class RestartDocker:
     """enable & restart docker service"""
@@ -46,6 +54,7 @@ class DockerService (module.BasicModule):
         addr = shell("ifconfig docker0 2>/dev/null | grep inet | grep ask").strip()
         if addr != "":
             print "Address detected: -%s-" % addr
+            shell("date +%s > /tmp/last_seen_docker")
             return True
         return False
 
