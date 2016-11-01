@@ -14,10 +14,11 @@ class RebootOnce:
     """reboot once"""
     #TODO: use regular trigger_reboot
     def run(self):
+        now = int(time.time())
         oncefile = shell("cat /.rebooted")
-        if "1" in oncefile:
+        if not "not found" in oncefile and int(oncefile) > now-86400:
             return False
-        shell("echo 1 > /.rebooted")
+        shell("date +%s > /.rebooted")
         shell("reboot")
 
 class Usb (module.BasicModule):
