@@ -1,20 +1,35 @@
 #!/usr/bin/env
 
 import os
+import pwd
 import sys
 import time
 from subprocess import STDOUT, check_output, CalledProcessError
 
 leds_enabled = False
 
+MAINT_DIR="/monroe/maintenance"
+MAINT_USER="monroe"
+MAINT_FLAG="/monroe/maintenance/enabled"
+MAINT_FLAG_LEGACY="/.maintenance"
+MAINT_FILE="/monroe/maintenance/reason"
+
 def trigger_maintenance(reason):
-    fd = open("/.maintenance","w")
+    if not os.path.exists(MAINT_DIR):
+        os.makedirs(MAINT_DIR)
+    os.chown(MAINT_DIR,0o777)
+
+    fd = open(MAINT_FLAG,"w")
     fd.write("1\n")
     fd.close()
+    uid = pwd.getpwnam(MAINT_USER).pw_uid
+    os.chown(MAINT_FLAG,uid)
+    os.symlink(MAINT_FLAG,MAINT_FLAG_LEGACY)
 
-    fd = open("/tmp/maintenance.reasons","a")
+    fd = open(MAINT_FILE,"w")
     fd.write("[%s] %s\n" % (time.time(),reason))
     fd.close()
+    os.chown(MAINT_FILE,uid)
 
 def trigger_reboot():
     ## DISABLED until tested
