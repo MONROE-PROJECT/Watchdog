@@ -18,7 +18,7 @@ MAINT_FILE="/monroe/maintenance/reason"
 def trigger_maintenance(reason):
     if not os.path.exists(MAINT_DIR):
         os.makedirs(MAINT_DIR)
-    os.chown(MAINT_DIR,0o777)
+    os.chmod(MAINT_DIR,0o777)
 
     fd = open(MAINT_FLAG,"w")
     fd.write("1\n")
