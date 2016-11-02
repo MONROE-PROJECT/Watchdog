@@ -24,7 +24,7 @@ def trigger_maintenance(reason):
     fd.write("1\n")
     fd.close()
     uid = pwd.getpwnam(MAINT_USER).pw_uid
-    grp = grp.getgrnam(MAINT_USER).gr_gid
+    gid = grp.getgrnam(MAINT_USER).gr_gid
     os.chown(MAINT_FLAG,uid,gid)
     os.symlink(MAINT_FLAG,MAINT_FLAG_LEGACY)
 
