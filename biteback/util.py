@@ -2,6 +2,7 @@
 
 import os
 import pwd
+import grp
 import sys
 import time
 from subprocess import STDOUT, check_output, CalledProcessError
@@ -23,13 +24,14 @@ def trigger_maintenance(reason):
     fd.write("1\n")
     fd.close()
     uid = pwd.getpwnam(MAINT_USER).pw_uid
-    os.chown(MAINT_FLAG,uid)
+    grp = grp.getgrnam(MAINT_USER).gr_gid
+    os.chown(MAINT_FLAG,uid,gid)
     os.symlink(MAINT_FLAG,MAINT_FLAG_LEGACY)
 
     fd = open(MAINT_FILE,"w")
     fd.write("[%s] %s\n" % (time.time(),reason))
     fd.close()
-    os.chown(MAINT_FILE,uid)
+    os.chown(MAINT_FILE,uid,gid)
 
 def trigger_reboot():
     ## DISABLED until tested
