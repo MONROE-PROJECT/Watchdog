@@ -5,7 +5,7 @@ from biteback.util import shell, trigger_maintenance
 import simplejson as json
 
 class MifiFinal:
-    """Ignore""" # the action takes a while to resolve
+    """Ignore""" 
 
     def run(self):
         return None
@@ -19,7 +19,7 @@ class RestartMifi:
 class Mifi (module.BasicModule):
     """Check if the mifis pass curl requests, iff connected"""
 
-    repairs = [RestartMifi()]
+    repairs = []
     final   = MifiFinal()
 
     def run(self):
