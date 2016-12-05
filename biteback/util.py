@@ -20,19 +20,32 @@ def trigger_maintenance(reason):
         os.makedirs(MAINT_DIR)
     os.chmod(MAINT_DIR,0o777)
 
-    fd = open(MAINT_FLAG,"w")
-    fd.write("1\n")
-    fd.close()
     uid = pwd.getpwnam(MAINT_USER).pw_uid
     gid = grp.getgrnam(MAINT_USER).gr_gid
-    os.chown(MAINT_FLAG,uid,gid)
-    os.symlink(MAINT_FLAG,MAINT_FLAG_LEGACY)
+    
+    try:
+        fd = open(MAINT_FLAG,"w")
+        fd.write("1\n")
+        fd.close()
+    except Exception,ex:
+    	print ex
+    	pass
 
-    fd = open(MAINT_FILE,"w")
-    fd.write("[%s] %s\n" % (time.time(),reason))
-    fd.close()
-    os.chown(MAINT_FILE,uid,gid)
+    try:
+        os.chown(MAINT_FLAG,uid,gid)
+        os.symlink(MAINT_FLAG,MAINT_FLAG_LEGACY)
+    except Exception,ex:
+    	print ex
+    	pass
 
+    try:
+        fd = open(MAINT_FILE,"w")
+        fd.write("[%s] %s\n" % (time.time(),reason))
+        fd.close()
+        os.chown(MAINT_FILE,uid,gid)
+    except Exception,ex:
+    	print ex
+ 
 def trigger_reboot():
     ## DISABLED until tested
     ## shell("shutdown -r +1 'System self-test unrecoverable. Trying reboot in 1 min.'")
