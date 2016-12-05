@@ -24,8 +24,8 @@ class Metadata (module.BasicModule):
     final   = MetaFinal()
 
     def run(self):
-        metadata = shell("ip netns exec monroe metadata | head -n 1", timeout=60)
-        if "Cannot open network namespace" in metadata:
+        metadata = shell("ip netns exec monroe metadata | head -c 6", timeout=60)
+        if "Cannot" in metadata:
             print "Netns monroe does not exist. Ignoring"
             return True
         if "MONROE" in metadata:
