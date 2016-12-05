@@ -17,10 +17,9 @@ class ConfigureAll:
 class ReinstallHalfInstalled:
     """reinstall half-installed packages"""
     def run(self):
-        packages = shell("grep -B1 half-installed /var/lib/dpkg/status").strip().split("\n")
-        while len(packages)>1:
-           packages.pop()
-           pkg = packages.pop().split(":")[1].strip()
+        # dpkg -l 'ih' means: Desired=Installed, Status=Half-inst
+        packages = shell("dpkg -l|grep -E ^ih|awk '{print $2}'").strip().split("\n")
+        for pkg in packages:
            shell("apt-get install -y --allow-unauthenticated --reinstall %s" % (pkg,), timeout=60)
 
 class DpkgCompleted (module.BasicModule):
@@ -30,9 +29,9 @@ class DpkgCompleted (module.BasicModule):
     final   = DpkgFinal()
 
     def run(self):
-        # identify half-installed and half-configured packages in dpkg
-        status = shell("grep half- /var/lib/dpkg/status") 
-        if "Status:" in status: 
+        # identify not completely installed packages in dpkg
+        status = shell("dpkg -l|grep -E ^i|grep -vE ^ii")
+        if status:
             return False
         return True
 
