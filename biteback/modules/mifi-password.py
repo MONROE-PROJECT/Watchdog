@@ -6,6 +6,7 @@ import simplejson as json
 import time
 
 class MifiPasswordFinal():
+	"""Maintenance"""
 	def run(self):
 		return trigger_maintenance("MiFi password could not be changed to default.")
 
