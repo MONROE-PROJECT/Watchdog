@@ -12,12 +12,13 @@ class MifiFinal():
 class ResetPasswords():
 	"""try to reset mifi passwords to the default"""
 	def run(self):
-	    wifipass=shell("bash -c 'source /etc/default/network-listener; echo $MF910_WIFI_PASS'") 
-	    adminpass=shell("bash -c 'source /etc/default/network-listener; echo $MF910_ADMIN_PASS'") 
+	    wifipass=shell("bash -c 'source /etc/default/network-listener; echo $MF910_WIFI_PASS'").strip() 
+	    adminpass=shell("bash -c 'source /etc/default/network-listener; echo $MF910_ADMIN_PASS'").strip()
 		
 	    if not wifipass or not adminpass:
 	        print "No default passwords defined in /etc/default/network-listener"
 		return False
+            print "Trying to set passwords ", wifipass, adminpass
 			
             pid = shell("pgrep network-listen")
             shell("kill -STOP %s" % pid) 
