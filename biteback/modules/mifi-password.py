@@ -12,20 +12,20 @@ class MifiFinal():
 class ResetPasswords():
 	"""try to reset mifi passwords to the default"""
 	def run(self):
-		wifipass=shell(". /etc/default/network-listener; echo $MF910_WIFI_PASS") 
-		adminpass=shell(". /etc/default/network-listener; echo $MF910_ADMIN_PASS") 
+	    wifipass=shell(". /etc/default/network-listener; echo $MF910_WIFI_PASS") 
+	    adminpass=shell(". /etc/default/network-listener; echo $MF910_ADMIN_PASS") 
 		
-		if not wifipass or not adminpass:
-			print "No default passwords defined in /etc/default/network-listener"
-			return False
+	    if not wifipass or not adminpass:
+	        print "No default passwords defined in /etc/default/network-listener"
+		return False
 			
-        pid = shell("pgrep network-listen")
-        shell("kill -STOP %s" % pid) 
-        time.sleep(300)
-        for interface in ["usb0", "usb1", "usb2"]:
-            shell("mf910-password %s %s %s" % (interface, wifipass, adminpass))
-        shell("rm /var/log/network-listener.log")
-        shell("kill -CONT %s" % pid)
+            pid = shell("pgrep network-listen")
+            shell("kill -STOP %s" % pid) 
+            time.sleep(300)
+            for interface in ["usb0", "usb1", "usb2"]:
+                shell("mf910-password %s %s %s" % (interface, wifipass, adminpass))
+            shell("rm /var/log/network-listener.log")
+            shell("kill -CONT %s" % pid)
 
 
 class MifiPassword (module.BasicModule):
