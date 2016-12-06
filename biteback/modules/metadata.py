@@ -15,7 +15,7 @@ class ResetContainers:
     """stop all containers and restart base experiments"""
     def run(self):
         shell("docker stop -t 0 $(docker ps -q)")
-        shell("monroe-experiments")
+        shell("monroe-experiments", timeout=120)
 
 class Metadata (module.BasicModule):
     """metadata-exporter service"""
