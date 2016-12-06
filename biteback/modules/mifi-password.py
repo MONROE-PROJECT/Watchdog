@@ -5,7 +5,7 @@ from biteback.util import shell, trigger_maintenance
 import simplejson as json
 import time
 
-class MifiFinal():
+class MifiPasswordFinal():
 	def run(self):
 		return trigger_maintenance("MiFi password could not be changed to default.")
 
@@ -33,7 +33,7 @@ class MifiPassword (module.BasicModule):
     """Check if a mifi does not use the default password"""
 
     repairs = [ResetPasswords() ]
-    final   = MifiFinal()
+    final   = MifiPasswordFinal()
 
     def run(self):
         logfile = shell("tail -n 20 /var/log/network-listener.log")
