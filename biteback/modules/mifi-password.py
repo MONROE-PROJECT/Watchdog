@@ -23,7 +23,7 @@ class ResetPasswords():
         shell("kill -STOP %s" % pid) 
         time.sleep(300)
         for interface in ["usb0", "usb1", "usb2"]:
-            shell("mf910-password %s %s %s" % (interface, wifipass, adminpass)
+            shell("mf910-password %s %s %s" % (interface, wifipass, adminpass))
         shell("rm /var/log/network-listener.log")
         shell("kill -CONT %s" % pid)
 
