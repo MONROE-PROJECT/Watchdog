@@ -24,12 +24,16 @@ class ReinstallMarvin:
 class MarvinService (module.BasicModule):
     """marvin service"""
 
-    repairs = [RestartMarvin(), ReinstallMarvin()]
+    repairs = [RestartMarvin()]
     final   = MarvinFinal()
 
     def run(self):
         # first check if it configured, if no, ignore 
         ls = shell("ls /etc/marvind.conf")
+        if "No such file" in ls:
+            return True
+        # and we have keys
+        ls = shell("ls /etc/keys/marvind")
         if "No such file" in ls:
             return True
         ps = shell("ps ax|grep marvind")
