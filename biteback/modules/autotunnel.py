@@ -14,7 +14,7 @@ class AutotunnelFinal:
             pass
         if last is None:
             return # Ignore
-        uptime = int(shell("tuptime -s -S %s" % last)) # uptime since last tunnel
+        uptime = int(shell("tuptime -s --csv --tsince %s | tail -n 1 | cut -d, -f2 | tr -d \\\"" % last)) # uptime since last tunnel
         if uptime > 259200: # three days
             return trigger_reinstall()
         # TODO: how often should we reboot before trying a reinstall?
