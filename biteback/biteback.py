@@ -55,11 +55,6 @@ def watchdog(doRepairs=True, doFinals=True, doForce=False):
     success = len(tests)
     run     = 0
 
-    # Running tests: One on, one blinking
-    leds(True, False, False)
-    led_heartbeat(2)
-    led_heartbeat(3)
-
     for test in tests:
         print "=== Testing %s ===" % test.__doc__
         if not succeeds(test.run):
@@ -86,13 +81,7 @@ def watchdog(doRepairs=True, doFinals=True, doForce=False):
 
     sysevent("%i/%i tests succeeded, %i tests run." % (success, len(tests), run), SYSEVENT_STATUS)
     if success == len(tests):
-        leds(True, True, True)
         shell("grub-editenv /.bootos set BOOTCOUNT=0")
-    elif success == len(tests)-1 and not succeeds(Hub().run):
-        leds(True, True, False)
-    else:
-        # Failed tests: One green light - the third one will be set if the hub is connected with modems
-        leds(True, False, False)
     fd = open("/tmp/biteback.last","w")
     fd.write(str(int(time.time())))
     fd.close()
@@ -105,7 +94,6 @@ def main():
     parser.add_argument("-f","--force", help="run, despite having run during the last %i seconds" % (POLICY_RUN_DELAY,), action="store_true")
     args = parser.parse_args()
 
-    init_leds()
     watchdog(not args.skip_repairs, not args.skip_finals, args.force)
 
 if __name__ == "__main__":

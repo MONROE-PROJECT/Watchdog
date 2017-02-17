@@ -7,8 +7,6 @@ import sys
 import time
 from subprocess import STDOUT, check_output, CalledProcessError
 
-leds_enabled = False
-
 MAINT_DIR="/monroe/maintenance"
 MAINT_USER="monroe"
 MAINT_FLAG="/monroe/maintenance/enabled"
@@ -83,27 +81,3 @@ def shell(cmd, timeout=10, source=None, bashEscape=False):
       print "[DEBUG]", ex
       output = "Failed"
     return output
-
-def init_leds():
-    global leds_enabled
-    ok = shell("modprobe leds-apu ledtrig_heartbeat; echo $?").strip()
-    if ok == "0":
-        leds_enabled = True
-
-def leds(a,b,c):
-    global leds_enabled
-    if not leds_enabled: return
-    if a is not None:
-        shell("echo none > /sys/class/leds/apu\:%i/trigger" % (1,))
-        shell("echo %i > /sys/class/leds/apu\:%i/brightness" % (1 if a else 0, 1))
-    if b is not None:
-        shell("echo none > /sys/class/leds/apu\:%i/trigger" % (2,))
-        shell("echo %i > /sys/class/leds/apu\:%i/brightness" % (1 if b else 0, 2))
-    if c is not None:
-        shell("echo none > /sys/class/leds/apu\:%i/trigger" % (3,))
-        shell("echo %i > /sys/class/leds/apu\:%i/brightness" % (1 if c else 0, 3))
-
-def led_heartbeat(led):
-    global leds_enabled
-    if not leds_enabled: return
-    shell("echo heartbeat > /sys/class/leds/apu\:%i/trigger" % (led,))
