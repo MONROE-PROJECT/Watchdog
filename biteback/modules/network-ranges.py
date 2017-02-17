@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from biteback import module, register
-from biteback.util import shell, trigger_maintenance, leds
+from biteback.util import shell, trigger_maintenance
 from random import randint
 
 class RangesFinal:
