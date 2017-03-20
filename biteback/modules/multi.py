@@ -41,8 +41,7 @@ class MultiService (module.BasicModule):
         #     addr = shell("ifconfig %s 2>/dev/null | grep inet | grep ask" % iface).strip()
         #     if addr != "":
         #         print "Address detected: -%s-" % addr
-        #         return True
-        return False
+        return True
 
 
 register.put(MultiService())
