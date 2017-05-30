@@ -7,14 +7,14 @@ class ThinpoolFinal:
     """Maintenance"""
 
     def run(self):
-        return trigger_maintenance("Thinpool device out of sync. Removed, to be restored by ansible.")
+        return trigger_maintenance("Thinpool device out of sync. Unable to remove (check dmsetup ls --tree).")
 
 class RemoveThinpool:
     """remove thinpool device and stop docker daemon"""
 
     def run(self):
         shell("systemctl stop docker", timeout=60)                                       # should be stopped, just in case 
-        shell("dmsetup ls|grep docker-|cut -f1 -d'('|xargs dmsetup remove", timeout=60)  # remove any stale leases on the thinpool
+        shell("dmsetup ls|grep docker-|cut -f1 -d'('|sort|xargs dmsetup remove", timeout=60)  # remove any stale leases on the thinpool
         shell("lvremove -f /dev/mapper/vg--monroe-tp--docker", timeout=60)               # remove the thinpool device
         shell("systemctl start docker")                                                  # will fail, but remove the systemctl status message this test triggers on
 
