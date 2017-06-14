@@ -28,6 +28,8 @@ class Thinpool (module.BasicModule):
         status = shell("systemctl status docker -l")
         if "Unable to take ownership of thin-pool" in status:
             return False
+        if "Possibly using a different" in status:  #...thin pool than last invocation
+            return False
         return True
 
 register.put(Thinpool())
