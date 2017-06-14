@@ -2,6 +2,7 @@
 
 from biteback import module, register
 from biteback.util import shell, trigger_maintenance
+import time
 
 class DockerFinal:
     """Maintenance"""
@@ -14,7 +15,7 @@ class DockerFinal:
             shell("date +%s > /tmp/last_seen_docker")
         else:
             last = int(last)
-            if (now-last) > 1800:
+            if (int(time.time())-last) > 1800:
                 return trigger_maintenance("docker service has not run for 30 minutes.")
 
 class RestartDocker:
