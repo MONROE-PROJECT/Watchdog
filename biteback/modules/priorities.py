@@ -4,6 +4,7 @@ from biteback import module, register
 from biteback.util import shell, trigger_maintenance
 import sqlite3 as db
 import simplejson as json
+import requests     # this import is slow. 
 
 class PrioritiesFinal:
     """Maintenance"""
@@ -23,32 +24,24 @@ class Priorities(module.BasicModule):
     PRIO_1000MB = 14
 
     def run(self):
-        conn = db.connect('/etc/config/celerway.db')
-        c = conn.cursor()
-        links = c.execute("SELECT ICCIDMAC, USEREST from Links")
-        links = links.fetchall()
 
-        data = json.loads(shell("curl -s http://localhost:88/dlb"))
-        
-        priorities = {}
-        eth0 = [x['mac'] for x in data['interfaces'] if x['name']=='eth0']
-        if eth0:
-            priorities[eth0[0]] = self.PRIO_1000MB
-        wlan0 = [x['mac'] for x in data['interfaces'] if x['name']=='wlan0']
-        if wlan0:
-            priorities[wlan0[0]] = self.PRIO_500MB
+        dlbdata = requests.get('http://localhost:88/dlb')
+        post = []
+        for iface in dlbdata.json().get('interfaces'):
+            name  = iface.get('name')
+            index = iface.get('index')
+            iid = iface.get('iccid',iface.get('mac'))
+            conn = iface.get('conn')
+            if "eth" in name:
+                post.append({'mac':iid, 'index':index, 'conn':PRIO_1000MB})
+            elif "wlan" in name:
+                post.append({'mac':iid, 'index':index, 'conn':PRIO_500MB})
+            elif (conn != PRIO_100MB) and (conn != PRIO_04MB):
+                # these two values are set by the scheduling client
+                post.append({'iccid':iid, 'index':index, 'conn':PRIO_04MB})
+        payload = json.dumps({'interfaces':post})
+        requests.post('http://localhost:88/dlb', payload)
 
-        for mac,userest in links:
-            if mac in priorities:
-                if userest != priorities[mac]:
-                    c.execute("UPDATE Links SET USEREST=? WHERE ICCIDMAC=?", (priorities[mac], mac))
-                    print "Setting %s to %s" % (mac, priorities[mac])
-            elif (userest != self.PRIO_04MB) and (userest != self.PRIO100MB):
-                # scheduling client sets these two values
-                c.execute("UPDATE Links SET USEREST=? WHERE ICCIDMAC=?", (self.PRIO_04MB, mac))
-                print "Setting %s to %s" % (mac, self.PRIO_04MB)
-        conn.commit()
-        conn.close()
         return True
 
 register.put(Priorities())
