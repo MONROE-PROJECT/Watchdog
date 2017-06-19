@@ -37,16 +37,14 @@ class Priorities(module.BasicModule):
         wlan0 = [x['mac'] for x in data['interfaces'] if x['name']=='wlan0']
         if wlan0:
             priorities[wlan0[0]] = self.PRIO_500MB
-        wwan0 = [x['iccid'] for x in data['interfaces'] if x['name']=='wwan0']
-        if wwan0:
-            priorities[wwan0[0]] = self.PRIO_100MB
 
         for mac,userest in links:
             if mac in priorities:
                 if userest != priorities[mac]:
                     c.execute("UPDATE Links SET USEREST=? WHERE ICCIDMAC=?", (priorities[mac], mac))
                     print "Setting %s to %s" % (mac, priorities[mac])
-            elif userest != self.PRIO_04MB:
+            elif (userest != self.PRIO_04MB) and (userest != self.PRIO100MB):
+                # scheduling client sets these two values
                 c.execute("UPDATE Links SET USEREST=? WHERE ICCIDMAC=?", (self.PRIO_04MB, mac))
                 print "Setting %s to %s" % (mac, self.PRIO_04MB)
         conn.commit()
