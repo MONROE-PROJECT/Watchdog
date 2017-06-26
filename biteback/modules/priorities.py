@@ -25,7 +25,6 @@ class Priorities(module.BasicModule):
     PRIO_1000MB = 15
 
     def run(self):
-
         dlbdata = requests.get('http://localhost:88/dlb')
         post = []
         for iface in dlbdata.json().get('interfaces'):
@@ -37,7 +36,7 @@ class Priorities(module.BasicModule):
                 post.append({'mac':iid, 'index':index, 'conn':PRIO_1000MB})
             elif "wlan" in name:
                 post.append({'mac':iid, 'index':index, 'conn':PRIO_500MB})
-            elif (conn != PRIO_100MB) and (conn != PRIO_04MB):
+            elif (conn != PRIO_50MB) and (conn != PRIO_04MB):
                 # these two values are set by the scheduling client
                 post.append({'iccid':iid, 'index':index, 'conn':PRIO_04MB})
         payload = json.dumps({'interfaces':post})
