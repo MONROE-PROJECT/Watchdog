@@ -18,10 +18,11 @@ class Priorities(module.BasicModule):
     final   = PrioritiesFinal()
 
     # from dlb/Address.h
-    PRIO_04MB   = 2
-    PRIO_100MB  = 11
-    PRIO_500MB  = 13
-    PRIO_1000MB = 14
+    PRIO_04MB = 3
+    PRIO_50MB = 11
+    PRIO_100MB = 12
+    PRIO_500MB  = 14
+    PRIO_1000MB = 15
 
     def run(self):
 
