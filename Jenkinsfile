@@ -7,7 +7,7 @@ node ('dockerslave') {
     // Be sure that workspace is cleaned
     deleteDir()
     stage ('Git') {
-        git branch: 'routing', url: 'git@github.com:MONROE-PROJECT/Watchdog.git'
+        git branch: 'master', url: 'git@github.com:MONROE-PROJECT/Watchdog.git'
         gitCommit = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
         shortCommit = gitCommit.take(6)
         commitChangeset = sh(returnStdout: true, script: 'git diff-tree --no-commit-id --name-status -r HEAD').trim()
