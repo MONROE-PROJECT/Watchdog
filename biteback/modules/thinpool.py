@@ -30,6 +30,8 @@ class Thinpool (module.BasicModule):
             return False
         if "Possibly using a different" in status:  #...thin pool than last invocation
             return False
+        if "Base Device UUID and Filesystem verification failed" in status:
+            return False
         return True
 
 register.put(Thinpool())
