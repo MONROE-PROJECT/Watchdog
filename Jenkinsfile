@@ -1,6 +1,6 @@
 import java.text.SimpleDateFormat
 jobName = "python-biteback"
-version = "0.1.41"
+version = "0.1.42"
 build_dir = "deb_dist"
 
 node ('dockerslave') {
