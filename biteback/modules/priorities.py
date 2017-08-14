@@ -33,12 +33,12 @@ class Priorities(module.BasicModule):
             iid = iface.get('iccid',iface.get('mac'))
             conn = iface.get('conn')
             if "eth" in name:
-                post.append({'mac':iid, 'index':index, 'conn':PRIO_1000MB})
+                post.append({'mac':iid, 'index':index, 'conn':self.PRIO_1000MB})
             elif "wlan" in name:
-                post.append({'mac':iid, 'index':index, 'conn':PRIO_500MB})
+                post.append({'mac':iid, 'index':index, 'conn':self.PRIO_500MB})
             elif (conn != PRIO_50MB) and (conn != PRIO_04MB):
                 # these two values are set by the scheduling client
-                post.append({'iccid':iid, 'index':index, 'conn':PRIO_04MB})
+                post.append({'iccid':iid, 'index':index, 'conn':self.PRIO_04MB})
         payload = json.dumps({'interfaces':post})
         requests.post('http://localhost:88/dlb', payload)
 
