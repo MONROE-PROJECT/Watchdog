@@ -36,7 +36,7 @@ class Priorities(module.BasicModule):
                 post.append({'mac':iid, 'index':index, 'conn':self.PRIO_1000MB})
             elif "wlan" in name:
                 post.append({'mac':iid, 'index':index, 'conn':self.PRIO_500MB})
-            elif (conn != PRIO_50MB) and (conn != PRIO_04MB):
+            elif (conn != self.PRIO_50MB) and (conn != self.PRIO_04MB):
                 # these two values are set by the scheduling client
                 post.append({'iccid':iid, 'index':index, 'conn':self.PRIO_04MB})
         payload = json.dumps({'interfaces':post})
