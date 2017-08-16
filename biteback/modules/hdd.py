@@ -10,9 +10,10 @@ class HddFinal:
         return trigger_maintenance("less than 500000 bytes of free disk space.")
 
 class ClearLogs:
-    """delete rotated log files and other suspects"""
+    """delete rotated log files, tmp files and other suspects"""
     def run(self):
-        shell("rm /var/log/*.gz /var/log/*.?", timeout=60)
+        shell("rm /var/log/*.gz /var/log/*.? /var/tmp/*", timeout=60)
+        shell("rm /var/lib/docker/tmp/* || true", timeout=60)
         shell("apt-get -y autoremove", timeout=120)
         shell("apt-get clean", timeout=120)
 
