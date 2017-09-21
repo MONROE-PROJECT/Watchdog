@@ -15,8 +15,8 @@ class DockerFinal:
             shell("date +%s > /tmp/last_seen_docker")
         else:
             last = int(last)
-            if (int(time.time())-last) > 1800:
-                return trigger_maintenance("docker service has not run for 30 minutes.")
+            if (int(time.time())-last) > 3600:
+                return trigger_maintenance("docker service has not run for 60 minutes.")
 
 class RestartDocker:
     """enable & restart docker service"""
