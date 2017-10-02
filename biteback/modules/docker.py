@@ -52,11 +52,6 @@ class DockerService (module.BasicModule):
         if not "active (running)" in status: 
             return False
 
-        addr = shell("ifconfig docker0 2>/dev/null | grep inet | grep ask").strip()
-        if addr != "":
-            print "Address detected: -%s-" % addr
-            shell("date +%s > /tmp/last_seen_docker")
-            return True
-        return False
+        return True
 
 register.put(DockerService())

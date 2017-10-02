@@ -35,9 +35,9 @@ class MEService (module.BasicModule):
     final   = MEFinal()
 
     def run(self):
-        # if the docker0 interface does not exist, not connecting is ok
-        docker = shell("ifconfig docker0 2>/dev/null | grep inet | grep ask")
-        if not "inet" in docker:
+        # if the metadata interface does not exist, not connecting is ok
+        metadata = shell("ifconfig metadata 2>/dev/null | grep inet | grep ask")
+        if not "inet" in metadata:
             return True
 
         ps =  shell("ps ax|grep exporter")
