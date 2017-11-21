@@ -36,8 +36,8 @@ class MEService (module.BasicModule):
 
     def run(self):
         # if the metadata interface does not exist, not connecting is ok
-        metadata = shell("ifconfig metadata 2>/dev/null | grep inet | grep ask")
-        if not "inet" in metadata:
+        metadata = shell("ifconfig metadata 2>&1 || true")
+        if "Device not found" in metadata:
             return True
 
         ps =  shell("ps ax|grep exporter")
