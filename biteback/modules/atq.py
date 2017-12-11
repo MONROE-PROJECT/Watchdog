@@ -12,7 +12,7 @@ class AtqFinal:
 class CleanAtqSpool:
     """clean the atq spool and reboot marvind"""
     def run(self):
-        shell("rm /var/spool/cron/atjobs/*")
+        shell("rm /var/spool/cron/atjobs/=*")
         shell("mv /var/log/marvind.log /var/log/marvind.log.atq")
         shell("systemctl restart marvind")
 
