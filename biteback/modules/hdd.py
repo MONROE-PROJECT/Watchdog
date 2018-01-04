@@ -42,6 +42,9 @@ class HddUsage (module.BasicModule):
         hddleft =  int(shell("df /var/log --output=avail|tail -n1"))
         if hddleft < 10000:
             return False
+        files =  int(shell("ls /tmp | wc -l"))
+        if files > 1000:
+            return False
         return True
 
 register.put(HddUsage())
