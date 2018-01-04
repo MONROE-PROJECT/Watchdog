@@ -14,7 +14,7 @@ class ClearLogs:
     def run(self):
         shell("rm /var/log/*.gz /var/log/*.? /var/tmp/*", timeout=60)
         shell("rm /var/lib/docker/tmp/* || true", timeout=60)
-        shell("cd /tmp && ls | grep metadata | grep json | xargs -n 1 rm", timeout=500)
+        shell("bash -c 'cd /tmp && ls | grep metadata | grep json | xargs -n 1 rm'", timeout=500)
         shell("apt-get -y autoremove", timeout=120)
         shell("apt-get clean", timeout=120)
 
