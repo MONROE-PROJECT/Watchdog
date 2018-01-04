@@ -39,6 +39,9 @@ class HddUsage (module.BasicModule):
         hddleft =  int(shell("df /tmp --output=avail|tail -n1"))
         if hddleft < 10000:
             return False
+        hddleft =  int(shell("df /var/log --output=avail|tail -n1"))
+        if hddleft < 10000:
+            return False
         return True
 
 register.put(HddUsage())
