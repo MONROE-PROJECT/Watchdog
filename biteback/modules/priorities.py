@@ -4,12 +4,13 @@ from biteback import module, register
 from biteback.util import shell, trigger_maintenance
 import sqlite3 as db
 import simplejson as json
-import requests     # this import is slow. 
+import requests     # this import is slow.
 
 class PrioritiesFinal:
     """Maintenance"""
     def run(self):
-        return trigger_maintenance("(priorities module failed, how?)")
+        # no action taken, this is not critical
+        return True
 
 class Priorities(module.BasicModule):
     """Correct priorities are set for load balancer interfaces"""
