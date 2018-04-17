@@ -21,10 +21,18 @@ class AutotunnelFinal:
         #if uptime > 86400:  # one day
         #    return trigger_reboot()
 
+class RestartDlb:
+    """restart dlb to adjust ip rules, if they do not match"""
+    def run(self):
+        ru9999 = shell("ip ru show pref 9999").split(" ")[-1]
+        ru90001 = shell("ip ru show pref 90001|head -n 1").split(" ")[-1]
+        if ru9999 != ru90001:
+            shell("systemctl restart dlb")
+
 class Autotunnel (module.BasicModule):
     """Backend reachable via autotunnel"""
 
-    repairs = []
+    repairs = [RestartDlb()]
     final   = AutotunnelFinal()
 
     def run(self):
