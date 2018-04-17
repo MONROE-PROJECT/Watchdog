@@ -24,8 +24,8 @@ class AutotunnelFinal:
 class RestartDlb:
     """restart dlb to adjust ip rules, if they do not match"""
     def run(self):
-        ru9999 = shell("ip ru show pref 9999").split(" ")[-1]
-        ru90001 = shell("ip ru show pref 90001|head -n 1").split(" ")[-1]
+        ru9999 = shell("ip ru show pref 9999").split()[-1]
+        ru90001 = shell("ip ru show pref 90001|head -n 1").split()[-1]
         if ru9999 != ru90001:
             shell("systemctl restart dlb")
 
