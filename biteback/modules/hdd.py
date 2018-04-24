@@ -13,6 +13,7 @@ class ClearLogs:
     """delete rotated log files, tmp files and other suspects"""
     def run(self):
         shell("rm /var/log/*.gz /var/log/*.? /var/tmp/*", timeout=60)
+        shell("systemctl restart rsyslog*", timeout=60)
         shell("rm /var/lib/docker/tmp/* || true", timeout=60)
         shell("bash -c 'cd /tmp && ls | grep metadata | grep json | xargs -n 1 rm'", timeout=500)
         shell("apt-get -y autoremove", timeout=120)
