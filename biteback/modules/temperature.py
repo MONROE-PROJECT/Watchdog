@@ -18,12 +18,12 @@ class Temperature(module.BasicModule):
     def run(self):
         temp = shell("/etc/munin/plugins/temp").split(" ")[1]
         if len(temp) > 0 and temp[0].isdigit():
-            # only convert if temp has at least a digit
-            temp = float(shell("/etc/munin/plugins/temp").split(" ")[1])
-            if temp > 100.0:
+            # only convert if temp has at least a digit            
+            if float(temp) > 100.0:
                 return False 
         
-        # for vm environments without sensors, temp is empty/non-digit so return True for these cases.  
+        # Temp is either below max threshold, or in a virtual environment (e.g. qemu)
+        # without sensors (temp is empty/non-digit). All good.   
         return True
 
 register.put(Temperature())
