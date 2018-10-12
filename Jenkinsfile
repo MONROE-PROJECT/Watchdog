@@ -1,6 +1,6 @@
 import java.text.SimpleDateFormat
 jobName = "python-biteback"
-version = "0.1.53"
+version = "0.1.54"
 build_dir = "deb_dist"
 
 @Library('jenkins-shared') _
