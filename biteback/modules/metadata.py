@@ -28,7 +28,7 @@ class Metadata (module.BasicModule):
         if "Cannot" in metadata:
             print "Netns monroe does not exist. Ignoring"
             return True
-        if "MONROE" in metadata:
+        if "MONROE" in metadata or "NNE" in metadata:
             return True
         return False
 

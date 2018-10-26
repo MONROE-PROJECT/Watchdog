@@ -41,11 +41,11 @@ class MEService (module.BasicModule):
             return True
 
         ps =  shell("ps ax|grep exporter")
-        if not "metadata-exporter" in ps: 
+        if not "metadata-exporter" in ps:
             return False
-        # is it a service? 
+        # is it a service?
         status =  shell("systemctl status metadata-exporter")
-        if not "running" in status: 
+        if not "running" in status:
             return False
 
 
