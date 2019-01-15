@@ -19,6 +19,11 @@ class ClearLogs:
         shell("apt-get -y autoremove", timeout=120)
         shell("apt-get clean", timeout=120)
 
+class ClearLogsAndRestartServices:
+    def run(self):
+        shell("rm /var/log/dlb.log /var/log/network-listener.log /var/log/auth.log")
+        shell("systemctl restart rsyslog network-listener dlb")
+
 class RmDocker:
     """delete /var/lib/docker and reinstall docker-engine"""
     def run(self):
@@ -30,7 +35,7 @@ class RmDocker:
 class HddUsage (module.BasicModule):
     """Disk space available"""
 
-    repairs = [ClearLogs()]
+    repairs = [ClearLogs(), ClearLogsAndRestartServices()]
     final   = HddFinal()
 
     def run(self):
