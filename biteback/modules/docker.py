@@ -45,7 +45,7 @@ class DockerService (module.BasicModule):
             return True
 
         ps = shell("ps ax|grep docker")
-        if not "--bip" in ps: 
+        if not "bin/dockerd" in ps: 
             return False
 
         status = shell("systemctl status docker")
