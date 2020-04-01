@@ -50,6 +50,7 @@ node {
                 archiveArtifacts "${build_dir}/*.deb"
             }
         }
+      }
     } catch (e) {
         currentBuild.result = "FAILED"
         throw e
