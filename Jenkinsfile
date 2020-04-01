@@ -5,7 +5,7 @@ build_dir = "deb_dist"
 
 @Library('jenkins-shared') _
 
-node ('dockerslave') {
+node {
     try {
         notifyBuild('STARTED')
         // Be sure that workspace is cleaned
@@ -28,18 +28,27 @@ node ('dockerslave') {
                     userRemoteConfigs: [[url: 'git@github.com:Celerway/celerway-jenkins.git']]])
         }
 
-        stage ('Build') {
-            sh "python setup.py --command-packages=stdeb.command bdist_deb"
+        docker.withRegistry('http://registry:5000') {
+          docker.image('registry:5000/jenkins-slave:monroe').inside('-u jenkins') {
 
-            sh "chmod +x versionize/versionize.sh; cp versionize/versionize.sh deb_dist/"
-            dir(build_dir) {
-                sh "./versionize.sh ${jobName}_0.1.0-1_all.deb ${jobName} ${version} ${shortCommit}"
-                sh "rm ${jobName}_0.1.0-1_all.deb"
+
+            stage ('Build') {
+            	sh "python setup.py --command-packages=stdeb.command bdist_deb"
+
+                sh """chmod +x versionize/versionize.sh
+                      cp versionize/versionize.sh deb_dist/
+                      # Sticky bit is set on directory during build. Removing it.
+                      chmod -R g-s deb_dist"""
+
+            	dir(build_dir) {
+                    sh "./versionize.sh ${jobName}_0.1.0-1_all.deb ${jobName} ${version} ${shortCommit}"
+                    sh "rm ${jobName}_0.1.0-1_all.deb"
+            	}
             }
-        }
 
-        stage ('Archive artifacts') {
-            archiveArtifacts "${build_dir}/*.deb"
+            stage ('Archive artifacts') {
+                archiveArtifacts "${build_dir}/*.deb"
+            }
         }
     } catch (e) {
         currentBuild.result = "FAILED"
