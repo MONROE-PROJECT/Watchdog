@@ -27,8 +27,6 @@ class KernelModules(module.BasicModule):
         mod = shell("lsmod")
         if not "k10temp" in mod:
             return False
-        if not "sp5100_tco" in mod:
-            return False
         return True
 
 register.put(KernelModules())
